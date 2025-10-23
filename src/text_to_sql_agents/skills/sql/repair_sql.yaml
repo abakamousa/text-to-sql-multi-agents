@@ -1,0 +1,20 @@
+name: repair_sql
+description: >
+  Attempt to fix a previously generated SQL query using the provided error message.
+template: |
+  You are a SQL expert debugging a failed query.
+  The user asked: {{query}}
+  The previous SQL statement was:
+  {{previous_sql}}
+  The database returned the following error:
+  {{error}}
+
+  Please generate a corrected SQL query that avoids this error.
+  Follow the same safety and read-only constraints as before.
+input_variables:
+  - name: query
+    required: true
+  - name: previous_sql
+    required: true
+  - name: error
+    required: true

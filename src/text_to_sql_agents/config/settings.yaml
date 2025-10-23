@@ -1,0 +1,76 @@
+# src/text_to_sql_agents/config/settings.yaml
+
+default:
+  app:
+    name: "Text-to-SQL Agent"
+    environment: "development"
+    log_level: "info"
+    port: 8000
+
+  azure:
+    openai_endpoint: "https://shared-openai-resource.openai.azure.com/"
+    openai_deployment: "gpt-4o"
+    use_managed_identity: true
+    foundry_agent_name: "text2sql-agent"
+
+  database:
+    provider: "azure_sql"
+    azure_sql:
+      server: "prod-sql-server.database.windows.net"
+      database: "text2sql_prod"
+      username: "sqladmin"
+      password: "PROD_PASSWORD"
+
+  orchestration:
+    retry_max: 2
+    enable_powerbi: true
+
+  powerbi:
+    workspace_id: "prod-workspace-id"
+    dataset_name: "Text2SQL_Prod_Dataset"
+    client_id: "prod-client-id"
+    tenant_id: "prod-tenant-id"
+
+
+development:
+  app:
+    name: "Text-to-SQL Agent (Dev)"
+    log_level: "debug"
+    port: 8000
+
+  azure:
+    openai_endpoint: "https://dev-openai-resource.openai.azure.com/"
+    openai_deployment: "gpt-4o-mini"
+    use_managed_identity: false
+    foundry_agent_name: "text2sql-agent-dev"
+
+  database:
+    provider: "azure_sql"
+    azure_sql:
+      server: "dev-sql-server.database.windows.net"
+      database: "text2sql_dev"
+      username: "sqladmin"
+      password: "DEV_PASSWORD"
+
+  orchestration:
+    retry_max: 3
+    enable_powerbi: false
+
+  powerbi:
+    workspace_id: "dev-workspace-id"
+    dataset_name: "Dev_Text2SQL_Dataset"
+    client_id: "dev-client-id"
+    tenant_id: "dev-tenant-id"
+
+
+staging:
+  app:
+    name: "Text-to-SQL Agent (Staging)"
+    log_level: "info"
+    port: 8080
+
+  azure:
+    openai_endpoint: "https://staging-openai-resource.openai.azure.com/"
+    openai_deployment: "gpt-4o"
+    use_managed_identity: true
+    foundry_agent_name: "text2sql-agent-staging"

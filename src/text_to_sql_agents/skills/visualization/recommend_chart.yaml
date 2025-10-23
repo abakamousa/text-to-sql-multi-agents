@@ -1,0 +1,25 @@
+name: recommend_chart
+description: >
+  Recommend a visualization type for a dataset and explain the choice.
+template: |
+  You are a data visualization expert.
+  Based on the following dataset, recommend the most suitable chart type and explain why.
+  Data sample:
+  {{data}}
+
+  Possible chart types:
+  - bar
+  - line
+  - scatter
+  - pie
+  - histogram
+  - table
+
+  Output format:
+  {
+    "chart_type": "<one of the above>",
+    "reason": "<brief explanation>"
+  }
+input_variables:
+  - name: data
+    required: true

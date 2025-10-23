@@ -1,0 +1,42 @@
+# src/text_to_sql_agents/magentic_orchestration/workflow_plans.yaml
+plans:
+  text_to_sql_basic:
+    description: "Basic Text->SQL flow: generate -> guardrail -> execute -> summarize -> visualize -> powerbi"
+    steps:
+      - id: gen
+        agent: generate_sql
+        input:
+          query: "${inputs.user_query}"
+        retries: 1
+
+      - id: guard
+        agent: guardrail_check
+        input:
+          sql: "${gen}"
+        retries: 0
+
+      - id: exec
+        agent: execute_sql
+        input:
+          sql: "${gen}"
+        retries: 2
+
+      - id: summary
+        agent: summarize
+        input:
+          query: "${inputs.user_query}"
+          data: "${exec}"
+        retries: 0
+
+      - id: viz
+        agent: recommend_chart
+        input:
+          data: "${exec}"
+        retries: 0
+
+      - id: powerbi
+        agent: powerbi_upload
+        input:
+          pbix_bytes: "${exec}"   # in practice, convert rows -> pbix bytes beforehand
+          user_id: "${inputs.user_id}"
+        retries: 1

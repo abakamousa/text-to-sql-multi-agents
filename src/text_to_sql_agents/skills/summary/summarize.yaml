@@ -1,0 +1,18 @@
+name: summarize
+description: >
+  Summarize a dataset or SQL query result into a concise natural-language description.
+template: |
+  You are a business analyst explaining query results to a non-technical audience.
+  SQL Query: {{query}}
+  Data Preview: {{data}}
+
+  Write a brief, clear summary describing what this data represents.
+  Include:
+  - Key trends or outliers
+  - Quantitative insights (if possible)
+  - Overall interpretation in plain English
+input_variables:
+  - name: query
+    required: true
+  - name: data
+    required: true

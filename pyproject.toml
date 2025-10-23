@@ -1,0 +1,135 @@
+[project]
+name = "text-to-sql-agents"
+version = "0.1.0"
+description = "A multi-agent Text-to-SQL orchestration framework using Semantic Kernel and Azure Foundry."
+authors = [{ name = "Moussa ABOUBAKAR", email = "moussa.aboubakar@devoteam.com" }]
+readme = "README.md"
+requires-python = ">=3.10"
+
+dependencies = [
+    # --- Core ---
+    "fastapi>=0.110.0",
+    "uvicorn>=0.30.0",
+    "httpx>=0.27.0",
+    "semantic-kernel>=0.5.0",
+    "azure-identity>=1.16.0",
+    "azure-ai-resources>=0.3.0",
+    "pyodbc>=5.1.0",
+
+    # --- Data / Visualization ---
+    "matplotlib>=3.9.0",
+
+    # --- LLM + Agents ---
+    "chainlit>=1.2.0",
+
+    # --- Utilities ---
+    "loguru>=0.7.2",
+    "pydantic>=2.8.0",
+    "pyyaml>=6.0.1",
+]
+
+[project.optional-dependencies]
+dev = [
+    "ruff>=0.6.0",
+    "black>=24.8.0",
+    "isort>=5.13.2",
+    "mypy>=1.10.0",
+    "pytest>=8.2.0",
+    "pytest-asyncio>=0.23.7",
+    "pre-commit>=3.7.1",
+    "ipython>=8.25.0",
+]
+
+[build-system]
+requires = ["setuptools>=68.0", "wheel"]
+build-backend = "setuptools.build_meta"
+
+
+# ============================================================
+# 🧹 CODE QUALITY & STYLE TOOLS
+# ============================================================
+
+[tool.black]
+line-length = 100
+target-version = ["py310"]
+skip-string-normalization = false
+
+[tool.ruff]
+line-length = 100
+target-version = "py310"
+select = ["E", "F", "W", "I", "N"]
+ignore = ["E501", "F401", "F841"]
+exclude = ["venv", "build", "dist", "__pycache__"]
+fix = true
+
+[tool.ruff.isort]
+combine-as-imports = true
+lines-after-imports = 2
+known-first-party = ["text_to_sql_agents"]
+force-sort-within-sections = true
+section-order = ["future", "standard-library", "third-party", "first-party", "local-folder"]
+
+[tool.isort]
+profile = "black"
+line_length = 100
+multi_line_output = 3
+include_trailing_comma = true
+use_parentheses = true
+known_first_party = ["text_to_sql_agents"]
+force_grid_wrap = 0
+combine_as_imports = true
+
+[tool.mypy]
+python_version = "3.10"
+ignore_missing_imports = true
+warn_redundant_casts = true
+warn_unused_ignores = true
+disallow_untyped_defs = false
+follow_imports = "silent"
+check_untyped_defs = true
+pretty = true
+
+
+# ============================================================
+# ⚙️ UV PACKAGE MANAGER CONFIG
+# ============================================================
+
+[tool.uv]
+index-url = "https://pypi.org/simple"
+cache-dir = ".uv_cache"
+
+[tool.uv.scripts]
+# Run backend API
+start = "uvicorn src.text_to_sql_agents.main:app --reload --host 0.0.0.0 --port 8000"
+
+# Run unit tests
+test = "pytest -v"
+
+# Lint & format code
+lint = "ruff check src/ && black --check src/"
+format = "ruff check --fix src/ && black src/"
+
+# Type-checking
+types = "mypy src/"
+
+# Import order check (consistency of import groups)
+lint-imports = "ruff check --select I src/"
+
+# Run all quality checks
+qa = "uv run lint && uv run lint-imports && uv run types"
+
+
+# ============================================================
+# 🧪 OPTIONAL TEST SETTINGS
+# ============================================================
+
+[tool.pytest.ini_options]
+minversion = "8.0"
+addopts = "-ra -q"
+testpaths = ["tests"]
+asyncio_mode = "auto"
+
+[dependency-groups]
+dev = [
+    "pre-commit>=4.3.0",
+]
