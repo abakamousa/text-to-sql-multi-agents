@@ -1,0 +1,52 @@
+@startuml deployment
+title ☁️ Azure Deployment Architecture — Text-to-SQL Multi-Agent System
+
+actor User as U
+rectangle "Frontend (Chainlit)" as CL {
+  component "Chainlit UI" as UI
+}
+
+rectangle "Backend (FastAPI)" as API {
+  component "FastAPI App" as FAPI
+  component "Semantic Kernel Orchestrator" as SK
+}
+
+cloud "Azure Foundry Runtime" as AF {
+  component "SQL Generator Agent" as AG1
+  component "Guardrail Agent" as AG2
+  component "SQL Executor Agent" as AG3
+  component "Regenerator Agent" as AG4
+  component "Summarizer Agent" as AG5
+  component "Visualization Agent" as AG6
+  component "Power BI Exporter" as AG7
+}
+
+database "Azure SQL" as DB1
+database "BigQuery" as DB2
+database "Snowflake" as DB3
+component "Power BI Workspace" as BI
+
+U --> UI : Natural language query
+UI --> FAPI : REST / WebSocket request
+FAPI --> SK : Orchestration request
+
+SK --> AF : Invoke agents
+AF --> AG1
+AF --> AG2
+AF --> AG3
+AF --> AG4
+AF --> AG5
+AF --> AG6
+AF --> AG7
+
+AG3 --> DB1 : Execute SQL (Azure SQL)
+AG3 --> DB2 : Execute SQL (BigQuery)
+AG3 --> DB3 : Execute SQL (Snowflake)
+
+AG7 --> BI : Publish Power BI dashboard
+
+AF --> SK : Aggregated results
+SK --> FAPI : Final orchestration result
+FAPI --> UI : Summary + Chart + SQL + Power BI link
+
+@enduml
